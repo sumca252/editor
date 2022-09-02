@@ -35,6 +35,7 @@
                     <ButtonItem
                         text="Save"
                         icon="fa-solid fa-floppy-disk mr-2"
+                        @click="handleBtnSaveClick"
                     />
                 </div>
             </div>
@@ -48,6 +49,12 @@ export default {
     name: "HeaderItem",
     components: {
         ButtonItem,
+    },
+    methods: {
+        handleBtnSaveClick() {
+            let content = document.querySelector(".ql-editor").innerText;
+            console.log(content);
+        },
     },
 };
 </script>
