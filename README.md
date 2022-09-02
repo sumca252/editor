@@ -1,7 +1,23 @@
-# Vue 3 + Vite
+# Editor 
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A rich text editor made in the course [DV1612 JavaScript-based web frameworks](https://jsramverk.se/) at [BTH University](https://bth.se/).
 
-## Recommended IDE Setup
+### Install dependencies
+```
+npm install
+```
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+### Start the development server
+```
+npm run dev
+```
+
+### Build for production
+```
+npm run build
+```
+
+### Preview production build
+```
+npm run preview
+```
