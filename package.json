@@ -13,7 +13,8 @@
     "dependencies": {
         "@vueup/vue-quill": "^1.0.0-beta.9",
         "vue": "^3.2.37",
-        "vue-router": "^4.1.5"
+        "vue-router": "^4.1.5",
+        "vuex": "^4.0.2"
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^3.0.3",
