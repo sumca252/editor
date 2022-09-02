@@ -10,4 +10,16 @@ export default defineConfig({
             "@": path.resolve(__dirname, "src"),
         },
     },
+    build: {
+        outDir: "./dist",
+        sourcemap: true,
+        emptyOutDir: true,
+        rollupOptions: {
+            output: {
+                entryFileNames: "assets/js/[name].js",
+                chunkFileNames: "assets/js/[name].js",
+                assetFileNames: "assets/style/[name].[ext]",
+            },
+        },
+    },
 });
