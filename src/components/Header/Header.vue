@@ -31,13 +31,6 @@
                         >Editor</span
                     >
                 </router-link>
-                <div class="flex items-center lg:order-2">
-                    <ButtonItem
-                        text="Save"
-                        icon="fa-solid fa-floppy-disk mr-2"
-                        @click="handleBtnSaveClick"
-                    />
-                </div>
             </div>
         </nav>
     </header>
