@@ -8,6 +8,10 @@ class EditorService {
     saveData(data) {
         return axios.post("/editor", data);
     }
+
+    getDataById(id) {
+        return axios.get(`/editor/${id}`);
+    }
 }
 
 export default new EditorService();
