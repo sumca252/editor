@@ -37,15 +37,8 @@
 </template>
 
 <script>
-import ButtonItem from "@/components/Button/Button.vue";
 export default {
     name: "HeaderItem",
-    methods: {
-        handleBtnSaveClick() {
-            let content = document.querySelector(".ql-editor").innerText;
-            console.log(content);
-        },
-    },
 };
 </script>
 
