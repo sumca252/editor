@@ -5,7 +5,8 @@ import router from "@/router";
 import store from "@/store";
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:3000/api";
+axios.defaults.baseURL =
+    import.meta.env.VITE_AZURE_API_URL || "http://localhost:3000/api";
 axios.defaults.headers.common["Content-Type"] = "application/json";
 
 import { QuillEditor } from "@vueup/vue-quill";
