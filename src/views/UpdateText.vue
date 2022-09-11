@@ -29,6 +29,7 @@
                             focus:outline-none
                         "
                         type="text"
+                        name="title"
                         placeholder="Enter title"
                         v-model="title"
                     />
