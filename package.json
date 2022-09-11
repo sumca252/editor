@@ -4,9 +4,12 @@
     "version": "1.0.0",
     "type": "module",
     "scripts": {
+        "test": "start-server-and-test dev http://localhost:5173 cy:run",
+        "cy:run": "cypress run",
+        "cy:open": "cypress open --e2e",
         "lint": "eslint 'src/**/*.{js,vue}'",
         "fix": "eslint --fix 'src/**/*.{js,vue}'",
-        "dev": "vite",
+        "dev": "vite --port 5173",
         "build": "vite build",
         "preview": "vite preview",
         "deploy": "npm run build && rsync -av --delete dist/ isal20@ssh.student.bth.se:www/editor"
@@ -21,11 +24,13 @@
     "devDependencies": {
         "@vitejs/plugin-vue": "^3.0.3",
         "autoprefixer": "^10.4.8",
+        "cypress": "^10.7.0",
         "eslint": "^8.23.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-vue": "^9.4.0",
         "postcss": "^8.4.16",
         "prettier": "^2.7.1",
+        "start-server-and-test": "^1.14.0",
         "tailwindcss": "^3.1.8",
         "vite": "^3.0.7"
     }
