@@ -49,7 +49,8 @@ describe("Editor", () => {
             cy.get("button").contains("Update text").click();
 
             // check if new text with updated title and content exists
-            expect(cy.get("h5").should("contain", "Test Title")).to.exist;
+            expect(cy.get("h5").should("contain", "Test update title")).to
+                .exist;
             expect(cy.get("p").should("contain", "My updated text content")).to
                 .exist;
         });
