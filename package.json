@@ -6,6 +6,7 @@
     "scripts": {
         "test": "start-server-and-test dev http://localhost:5173 cy:run",
         "cy:run": "cypress run",
+        "cy:open": "cypress open --e2e",
         "lint": "eslint 'src/**/*.{js,vue}'",
         "fix": "eslint --fix 'src/**/*.{js,vue}'",
         "dev": "vite --port 5173",
