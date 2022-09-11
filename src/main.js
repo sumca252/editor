@@ -6,9 +6,7 @@ import store from "@/store";
 import axios from "axios";
 
 axios.defaults.baseURL =
-    import.meta.env.VITE_AZURE_API_URL || "http://localhost:3000/api";
-axios.defaults.headers.common["Content-Type"] = "application/json";
-
+    "https://jsramverk-editor-isal-20.azurewebsites.net/api";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 
