@@ -6,7 +6,7 @@
     "scripts": {
         "lint": "eslint 'src/**/*.{js,vue}'",
         "fix": "eslint --fix 'src/**/*.{js,vue}'",
-        "dev": "vite",
+        "dev": "vite --port 5173",
         "build": "vite build",
         "preview": "vite preview",
         "deploy": "npm run build && rsync -av --delete dist/ isal20@ssh.student.bth.se:www/editor"
