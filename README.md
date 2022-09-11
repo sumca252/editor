@@ -21,3 +21,9 @@ npm run build
 ```
 npm run preview
 ```
+
+### Starts the dev server and runs cypress headlessly
+``` 
+npm test 
+```
+
