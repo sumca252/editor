@@ -10,7 +10,7 @@
         "
     >
         <h1 class="text-2xl font-bold">All Documents</h1>
-        <router-link
+        <RouterLink
             :to="{ name: 'CreateText' }"
             class="
                 bg-transparent
@@ -27,7 +27,7 @@
         >
             <i class="fas fa-plus mr-2"></i>
             Create new text
-        </router-link>
+        </RouterLink>
     </div>
     <div>
         <div
@@ -55,7 +55,7 @@
                         dark:bg-gray-800 dark:border-gray-700
                     "
                 >
-                    <router-link
+                    <RouterLink
                         :to="{ name: 'UpdateText', params: { id: item._id } }"
                     >
                         <h5
@@ -70,7 +70,7 @@
                         >
                             {{ item.title }}
                         </h5>
-                    </router-link>
+                    </RouterLink>
                     <p
                         class="
                             mb-3
@@ -81,9 +81,10 @@
                     >
                         {{ item.content }}
                     </p>
-                    <router-link
+                    <RouterLink
                         :to="{ name: 'UpdateText', params: { id: item._id } }"
                         class="
+                            text-underlined
                             inline-flex
                             items-center
                             py-2
@@ -102,37 +103,35 @@
                     >
                         <i class="fas fa-eye mr-2"></i>
                         View
-                    </router-link>
+                    </RouterLink>
                 </div>
             </div>
         </div>
     </div>
 </template>
+<script setup>
+import { ref } from "vue";
+import EditorService from "@/services/editor.service.js";
 
-<script>
-import EditorService from "@/services/editor.service";
-export default {
-    name: "HomeItem",
-    data() {
-        return {
-            documents: {},
-        };
-    },
-    async created() {
-        try {
-            let response = await EditorService.getAllData();
+const documents = ref({});
 
-            this.documents = response.data.data;
-            this.documents.forEach((item) => {
-                let regex = /(<([^>]+)>)/gi; // regex to remove html tags
-                item.content = JSON.parse(item.content); // parse content to JSON
-                item.content = item.content // remove html tags
-                    .replace(regex, "")
-                    .substring(0, 100);
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    },
+const getDocuments = async () => {
+    try {
+        let response = await EditorService.getAllData();
+
+        documents.value = response.data.data;
+        documents.value.forEach((item) => {
+            let regex = /(<([^>]+)>)/gi; // regex to remove html tags
+            item.content = JSON.parse(item.content); // parse content to JSON
+            item.content = item.content // remove html tags
+                .replace(regex, "")
+                .substring(0, 100);
+        });
+    } catch (error) {
+        console.log(error);
+    }
 };
+
+// created hook
+getDocuments();
 </script>

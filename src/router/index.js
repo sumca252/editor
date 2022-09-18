@@ -1,19 +1,19 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Base from "@/views/Base.vue";
-import ListAll from "@/views/ListAll.vue";
-import CreateText from "@/views/CreateText.vue";
-import UpdateText from "@/views/UpdateText.vue";
+import BaseView from "@/views/BaseView.vue";
+import CreateView from "@/views/CreateView.vue";
+import ListAllView from "@/views/ListAllView.vue";
+import UpdateView from "@/views/UpdateView.vue";
 
 const routes = [
     {
         path: "/",
-        name: "Base",
-        component: Base,
+        name: "BaseView",
+        component: BaseView,
         children: [
             {
                 path: "/",
                 name: "Home",
-                component: ListAll,
+                component: ListAllView,
                 meta: {
                     title: "Home",
                 },
@@ -21,7 +21,7 @@ const routes = [
             {
                 path: "/editor/create",
                 name: "CreateText",
-                component: CreateText,
+                component: CreateView,
                 meta: {
                     title: "Create Text",
                 },
@@ -29,7 +29,7 @@ const routes = [
             {
                 path: "/editor/update/:id",
                 name: "UpdateText",
-                component: UpdateText,
+                component: UpdateView,
                 meta: {
                     title: "Update Text",
                 },

@@ -19,7 +19,7 @@
                     max-w-screen-xl
                 "
             >
-                <router-link :to="{ name: 'Home' }" class="flex items-center">
+                <RouterLink :to="{ name: 'Home' }" class="flex items-center">
                     <span
                         class="
                             self-center
@@ -30,17 +30,9 @@
                         "
                         >Editor</span
                     >
-                </router-link>
+                </RouterLink>
             </div>
         </nav>
     </header>
 </template>
 
-<script>
-export default {
-    name: "HeaderItem",
-};
-</script>
-
-<style>
-</style>

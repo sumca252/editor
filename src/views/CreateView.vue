@@ -10,10 +10,10 @@
                 p-6
             "
         >
-            <h1 class="text-2xl font-bold">Update Text</h1>
+            <h1 class="text-2xl font-bold">Create Text</h1>
         </div>
         <div class="mx-auto max-w-screen-xl p-4">
-            <form class="w-full pb-10" @submit.prevent="updateText">
+            <form class="w-full pb-10" @submit.prevent="saveText">
                 <div class="flex items-center border-b border-gray-500 py-2">
                     <input
                         class="
@@ -29,7 +29,6 @@
                             focus:outline-none
                         "
                         type="text"
-                        name="title"
                         placeholder="Enter title"
                         v-model="title"
                     />
@@ -50,11 +49,10 @@
                         type="submit"
                     >
                         <i class="fas fa-floppy-disk mr-2"></i>
-                        Update text
+                        Save text
                     </button>
                 </div>
             </form>
-
             <QuillEditor
                 theme="snow"
                 ref="editor"
@@ -66,56 +64,36 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import EditorService from "@/services/editor.service.js";
 
-export default {
-    name: "UpdateText",
-    data() {
-        return {
-            title: "",
-            content: ref(""),
-        };
-    },
+const title = ref("");
+const content = ref("");
 
-    mounted() {},
-    methods: {
-        async updateText() {
-            try {
-                let updatedData = {
-                    title: this.title,
-                    content: JSON.stringify(this.content),
-                };
+const router = useRouter();
 
-                let response = await EditorService.updateData(
-                    this.$route.params.id,
-                    updatedData
-                );
+/**
+ * Method to save text
+ */
+const saveText = async () => {
+    try {
+        console.log("Data to be saved", content);
+        let response = await EditorService.saveData({
+            title: title.value,
+            content: JSON.stringify(content.value),
+        });
 
-                if (response.status === 200) {
-                    this.$router.push({ name: "Home" });
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        },
-    },
-    async created() {
-        try {
-            let response = await EditorService.getDataById(
-                this.$route.params.id
-            );
-
-            this.title = response.data.data.title;
-
-            this.$refs.editor.setHTML(JSON.parse(response.data.data.content));
-        } catch (error) {
-            console.log(error);
+        if (response.status === 201) {
+            router.push({ name: "Home" });
         }
-    },
+    } catch (error) {
+        console.log(error);
+    }
 };
 </script>
+
 
 <style>
 .ql-editor {

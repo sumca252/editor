@@ -10,10 +10,10 @@
                 p-6
             "
         >
-            <h1 class="text-2xl font-bold">Create Text</h1>
+            <h1 class="text-2xl font-bold">Update Text</h1>
         </div>
         <div class="mx-auto max-w-screen-xl p-4">
-            <form class="w-full pb-10" @submit.prevent="saveText">
+            <form class="w-full pb-10" @submit.prevent="updateText">
                 <div class="flex items-center border-b border-gray-500 py-2">
                     <input
                         class="
@@ -29,6 +29,7 @@
                             focus:outline-none
                         "
                         type="text"
+                        name="title"
                         placeholder="Enter title"
                         v-model="title"
                     />
@@ -49,13 +50,14 @@
                         type="submit"
                     >
                         <i class="fas fa-floppy-disk mr-2"></i>
-                        Save text
+                        Update text
                     </button>
                 </div>
             </form>
+
             <QuillEditor
                 theme="snow"
-                ref="editor"
+                ref="editorRef"
                 placeholder="Enter content"
                 v-model:content="content"
                 contentType="html"
@@ -63,37 +65,54 @@
         </div>
     </div>
 </template>
+<script setup>
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import EditorService from "../services/editor.service";
 
-<script>
-import { ref } from "vue";
-import EditorService from "@/services/editor.service.js";
+const title = ref("");
+const content = ref("");
 
-export default {
-    name: "CreateText",
-    data() {
-        return {
-            title: "",
-            content: ref(""),
+const route = useRoute();
+const router = useRouter();
+
+const editorRef = ref({});
+
+const updateText = async () => {
+    try {
+        let updatedData = {
+            title: title.value,
+            content: JSON.stringify(content.value),
         };
-    },
-    methods: {
-        async saveText() {
-            try {
-                console.log("Data to be saved", this.content);
-                let response = await EditorService.saveData({
-                    title: this.title,
-                    content: JSON.stringify(this.content),
-                });
 
-                if (response.status === 201) {
-                    this.$router.push({ name: "Home" });
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        },
-    },
+        let response = await EditorService.updateData(
+            route.params.id,
+            updatedData
+        );
+
+        if (response.status === 200) {
+            router.push({ name: "Home" });
+        }
+    } catch (error) {
+        console.log(error);
+    }
 };
+
+const getDataById = async () => {
+    try {
+        let response = await EditorService.getDataById(route.params.id);
+
+        title.value = response.data.data.title;
+
+        editorRef.value.setHTML(JSON.parse(response.data.data.content));
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+onMounted(() => {
+    getDataById();
+});
 </script>
 
 <style>
