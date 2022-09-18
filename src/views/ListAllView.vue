@@ -132,6 +132,5 @@ const getDocuments = async () => {
     }
 };
 
-// created hook
 getDocuments();
 </script>
