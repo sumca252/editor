@@ -57,63 +57,66 @@
 
             <QuillEditor
                 theme="snow"
-                ref="editor"
+                ref="editorRef"
                 placeholder="Enter content"
                 v-model:content="content"
-                contentType="html"
+                contentType="delta"
+                @textChange="onTextChange"
             />
         </div>
     </div>
 </template>
+<script setup>
+import { ref, onMounted, watch, watchEffect } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import EditorService from "../services/editor.service";
 
-<script>
-import { ref } from "vue";
-import EditorService from "@/services/editor.service.js";
+const title = ref("");
+const content = ref("");
 
-export default {
-    name: "UpdateText",
-    data() {
-        return {
-            title: "",
-            content: ref(""),
+const route = useRoute();
+const router = useRouter();
+
+const editorRef = ref({});
+
+const updateText = async () => {
+    try {
+        let updatedData = {
+            title: title.value,
+            content: JSON.stringify(content.value),
         };
-    },
 
-    mounted() {},
-    methods: {
-        async updateText() {
-            try {
-                let updatedData = {
-                    title: this.title,
-                    content: JSON.stringify(this.content),
-                };
+        let response = await EditorService.updateData(
+            route.params.id,
+            updatedData
+        );
 
-                let response = await EditorService.updateData(
-                    this.$route.params.id,
-                    updatedData
-                );
-
-                if (response.status === 200) {
-                    this.$router.push({ name: "Home" });
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        },
-    },
-    async created() {
-        try {
-            let response = await EditorService.getDataById(
-                this.$route.params.id
-            );
-
-            this.title = response.data.data.title;
-
-            this.$refs.editor.setHTML(JSON.parse(response.data.data.content));
-        } catch (error) {
-            console.log(error);
+        if (response.status === 200) {
+            router.push({ name: "Home" });
         }
-    },
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const getDataById = async () => {
+    try {
+        let response = await EditorService.getDataById(route.params.id);
+
+        title.value = response.data.data.title;
+
+        editorRef.value.setContents(JSON.parse(response.data.data.content));
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+onMounted(() => {
+    getDataById();
+});
+
+const onTextChange = (delta, oldDelta, source) => {
+    console.log(delta.delta);
 };
 </script>
 

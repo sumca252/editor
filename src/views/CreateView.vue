@@ -58,43 +58,42 @@
                 ref="editor"
                 placeholder="Enter content"
                 v-model:content="content"
-                contentType="html"
+                contentType="delta"
             />
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import EditorService from "@/services/editor.service.js";
 
-export default {
-    name: "CreateText",
-    data() {
-        return {
-            title: "",
-            content: ref(""),
-        };
-    },
-    methods: {
-        async saveText() {
-            try {
-                console.log("Data to be saved", this.content);
-                let response = await EditorService.saveData({
-                    title: this.title,
-                    content: JSON.stringify(this.content),
-                });
+const title = ref("");
+const content = ref("");
+const router = useRouter();
+const editorRef = ref(null);
 
-                if (response.status === 201) {
-                    this.$router.push({ name: "Home" });
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        },
-    },
+/**
+ * Method to save text
+ */
+const saveText = async () => {
+    try {
+        console.log("Data to be saved", content);
+        let response = await EditorService.saveData({
+            title: title.value,
+            content: JSON.stringify(content.value),
+        });
+
+        if (response.status === 201) {
+            router.push({ name: "Home" });
+        }
+    } catch (error) {
+        console.log(error);
+    }
 };
 </script>
+
 
 <style>
 .ql-editor {

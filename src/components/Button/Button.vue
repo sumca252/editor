@@ -15,18 +15,19 @@
     </button>
 </template>
 
-<script>
-export default {
-    name: "ButtonItem",
-    props: {
-        text: {
-            type: String,
-        },
-        icon: {
-            type: String,
-        },
+<script setup>
+import { defineProps } from "vue";
+
+const props = defineProps({
+    text: {
+        type: String,
+        required: true,
     },
-};
+    icon: {
+        type: String,
+        required: true,
+    },
+});
 </script>
 
 <style>
