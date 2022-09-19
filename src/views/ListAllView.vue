@@ -60,7 +60,7 @@
                     >
                         <h5
                             class="
-                                mb-2
+                                mb-6
                                 text-2xl
                                 font-bold
                                 tracking-tight
@@ -71,16 +71,7 @@
                             {{ item.title }}
                         </h5>
                     </RouterLink>
-                    <p
-                        class="
-                            mb-3
-                            font-normal
-                            text-gray-700
-                            dark:text-gray-400
-                        "
-                    >
-                        {{ item.content }}
-                    </p>
+
                     <RouterLink
                         :to="{ name: 'UpdateText', params: { id: item._id } }"
                         class="
@@ -120,13 +111,6 @@ const getDocuments = async () => {
         let response = await EditorService.getAllData();
 
         documents.value = response.data.data;
-        documents.value.forEach((item) => {
-            let regex = /(<([^>]+)>)/gi; // regex to remove html tags
-            item.content = JSON.parse(item.content); // parse content to JSON
-            item.content = item.content // remove html tags
-                .replace(regex, "")
-                .substring(0, 100);
-        });
     } catch (error) {
         console.log(error);
     }

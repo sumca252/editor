@@ -60,13 +60,14 @@
                 ref="editorRef"
                 placeholder="Enter content"
                 v-model:content="content"
-                contentType="html"
+                contentType="delta"
+                @textChange="onTextChange"
             />
         </div>
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import EditorService from "../services/editor.service";
 
@@ -104,7 +105,7 @@ const getDataById = async () => {
 
         title.value = response.data.data.title;
 
-        editorRef.value.setHTML(JSON.parse(response.data.data.content));
+        editorRef.value.setContents(JSON.parse(response.data.data.content));
     } catch (error) {
         console.log(error);
     }
@@ -113,6 +114,10 @@ const getDataById = async () => {
 onMounted(() => {
     getDataById();
 });
+
+const onTextChange = (delta, oldDelta, source) => {
+    console.log(delta.delta);
+};
 </script>
 
 <style>

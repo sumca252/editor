@@ -58,7 +58,7 @@
                 ref="editor"
                 placeholder="Enter content"
                 v-model:content="content"
-                contentType="html"
+                contentType="delta"
             />
         </div>
     </div>
@@ -71,8 +71,8 @@ import EditorService from "@/services/editor.service.js";
 
 const title = ref("");
 const content = ref("");
-
 const router = useRouter();
+const editorRef = ref(null);
 
 /**
  * Method to save text
