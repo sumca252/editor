@@ -26,7 +26,6 @@ describe("Editor", () => {
 
             // check if new text with test title and content exists
             expect(cy.get("h5").should("contain", data.title)).to.exist;
-            expect(cy.get("p").should("contain", data.content)).to.exist;
         });
     });
 
