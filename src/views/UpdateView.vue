@@ -67,17 +67,17 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch, watchEffect } from "vue";
+import { ref, onMounted, watch, watchEffect, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { io } from "socket.io-client";
 import EditorService from "../services/editor.service";
 
+const editorRef = ref({});
 const title = ref("");
 const content = ref("");
 
 const route = useRoute();
 const router = useRouter();
-
-const editorRef = ref({});
 
 const updateText = async () => {
     try {
@@ -113,10 +113,21 @@ const getDataById = async () => {
 
 onMounted(() => {
     getDataById();
+    socket.emit("update-document", route.params.id);
+
+    socket.on("receive-changes", (document) => {
+        editorRef.value.getQuill().updateContents(document.delta.ops);
+    });
 });
 
-const onTextChange = (delta, oldDelta, source) => {
-    console.log(delta.delta);
+const socket = io("http://localhost:3000");
+
+onUnmounted(() => {
+    socket.disconnect();
+});
+
+const onTextChange = (delta) => {
+    socket.emit("send-changes", delta, route.params.id);
 };
 </script>
 
