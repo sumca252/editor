@@ -4,6 +4,7 @@ import CreateView from "@/views/CreateView.vue";
 import ListAllView from "@/views/ListAllView.vue";
 import UpdateView from "@/views/UpdateView.vue";
 import RegisterView from "@/views/RegisterView.vue";
+import LoginView from "@/views/LoginView.vue";
 
 const routes = [
     {
@@ -43,6 +44,14 @@ const routes = [
         component: RegisterView,
         meta: {
             title: "Register",
+        },
+    },
+    {
+        path: "/login",
+        name: "Login",
+        component: LoginView,
+        meta: {
+            title: "Login",
         },
     },
 ];
