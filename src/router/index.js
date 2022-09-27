@@ -3,6 +3,7 @@ import BaseView from "@/views/BaseView.vue";
 import CreateView from "@/views/CreateView.vue";
 import ListAllView from "@/views/ListAllView.vue";
 import UpdateView from "@/views/UpdateView.vue";
+import RegisterView from "@/views/RegisterView.vue";
 
 const routes = [
     {
@@ -35,6 +36,14 @@ const routes = [
                 },
             },
         ],
+    },
+    {
+        path: "/register",
+        name: "Register",
+        component: RegisterView,
+        meta: {
+            title: "Register",
+        },
     },
 ];
 
