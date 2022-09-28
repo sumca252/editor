@@ -1,6 +1,5 @@
 <template>
     <div class="bg-white dark:bg-gray-900">
-        here
         <div
             class="
                 flex flex-col
