@@ -101,20 +101,48 @@
     </div>
 </template>
 <script setup>
-import { ref } from "vue";
-import EditorService from "@/services/editor.service.js";
+/**
+ * imports
+ */
+import { ref, onMounted } from "vue";
+import { useUserStore } from "@/store/user";
+import EditorService from "@/services/editor.service";
 
+/**
+ * refs
+ */
 const documents = ref({});
 
+/**
+ * store
+ */
+const userStore = useUserStore();
+
+/**
+ * methods
+ */
 const getDocuments = async () => {
     try {
-        let response = await EditorService.getAllData();
-
-        documents.value = response.data.data;
+        const email = userStore.getUserEmail;
+        const response = await EditorService.getAllData();
+        let temp = [];
+        if (response.status === 200) {
+            temp = response.data.data.filter((doc) => {
+                if (doc.author === email || doc.allowed_users.includes(email)) {
+                    return doc;
+                }
+            });
+            documents.value = temp;
+        }
     } catch (error) {
-        console.log(error);
+        throw new Error(error);
     }
 };
 
-getDocuments();
+/**
+ * lifecycle hooks
+ */
+onMounted(() => {
+    getDocuments();
+});
 </script>
