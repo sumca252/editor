@@ -1,6 +1,9 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
+import { useUserStore } from "@/store/user";
+
 import BaseView from "@/views/BaseView.vue";
 import CreateView from "@/views/CreateView.vue";
+
 import ListAllView from "@/views/ListAllView.vue";
 import UpdateView from "@/views/UpdateView.vue";
 import RegisterView from "@/views/RegisterView.vue";
@@ -18,6 +21,7 @@ const routes = [
                 component: ListAllView,
                 meta: {
                     title: "Home",
+                    requiresAuth: true,
                 },
             },
             {
@@ -26,6 +30,7 @@ const routes = [
                 component: CreateView,
                 meta: {
                     title: "Create Text",
+                    requiresAuth: true,
                 },
             },
             {
@@ -34,6 +39,7 @@ const routes = [
                 component: UpdateView,
                 meta: {
                     title: "Update Text",
+                    requiresAuth: true,
                 },
             },
         ],
@@ -57,12 +63,21 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes,
 });
 
 router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} | Editor`;
+
+    const userStore = useUserStore();
+
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+        if (!userStore.isLoggedIn) {
+            next({ path: "/login" });
+            return;
+        }
+    }
     next();
 });
 
