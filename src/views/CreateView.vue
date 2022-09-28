@@ -28,6 +28,25 @@
                             leading-tight
                             focus:outline-none
                         "
+                        type="email"
+                        placeholder="Enter email to Share with"
+                        v-model="email"
+                    />
+                </div>
+                <div class="flex items-center border-b border-gray-500 py-2">
+                    <input
+                        class="
+                            appearance-none
+                            bg-transparent
+                            border-none
+                            w-full
+                            text-gray-700
+                            mr-3
+                            py-1
+                            px-2
+                            leading-tight
+                            focus:outline-none
+                        "
                         type="text"
                         placeholder="Enter title"
                         v-model="title"
@@ -63,27 +82,43 @@
         </div>
     </div>
 </template>
-
 <script setup>
+/**
+ * imports
+ */
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/store/user";
+
 import EditorService from "@/services/editor.service.js";
 
+/**
+ * refs
+ */
+const email = ref("");
 const title = ref("");
 const content = ref("");
 const router = useRouter();
 const editorRef = ref(null);
 
 /**
- * Method to save text
+ * store
+ */
+const userStore = useUserStore();
+
+/**
+ * methods
  */
 const saveText = async () => {
     try {
-        console.log("Data to be saved", content);
-        let response = await EditorService.saveData({
+        const data = {
             title: title.value,
             content: JSON.stringify(content.value),
-        });
+            author: userStore.getUserEmail,
+            email: email.value,
+        };
+
+        const response = await EditorService.saveData(data);
 
         if (response.status === 201) {
             router.push({ name: "Home" });
@@ -93,8 +128,6 @@ const saveText = async () => {
     }
 };
 </script>
-
-
 <style>
 .ql-editor {
     min-height: 500px;

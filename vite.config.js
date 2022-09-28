@@ -21,6 +21,7 @@ export default defineConfig({
                 assetFileNames: "assets/style/[name].[ext]",
             },
         },
+        chunkSizeWarningLimit: 1000,
     },
     base: "./",
 });
