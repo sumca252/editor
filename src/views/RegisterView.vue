@@ -259,8 +259,6 @@ const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 
-const error = ref("");
-
 const router = useRouter();
 
 const userStore = useUserStore();
@@ -290,12 +288,10 @@ const registerUser = async () => {
 
     try {
         const status = await userStore.register(newUser);
-        const user = userStore.getUser;
+        console.log(status);
 
-        if (user) {
+        if (status.message === "User created") {
             router.push("/login");
-        } else {
-            error.value = status.message;
         }
     } catch (error) {
         throw new Error(error);

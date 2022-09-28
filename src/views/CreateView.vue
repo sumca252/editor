@@ -31,6 +31,8 @@
                         type="email"
                         placeholder="Enter email to Share with"
                         v-model="email"
+                        name="email"
+                        id="email"
                     />
                 </div>
                 <div class="flex items-center border-b border-gray-500 py-2">
@@ -50,6 +52,8 @@
                         type="text"
                         placeholder="Enter title"
                         v-model="title"
+                        name="title"
+                        id="title"
                     />
                     <button
                         class="
