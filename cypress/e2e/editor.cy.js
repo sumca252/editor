@@ -1,8 +1,8 @@
 /// <references types="cypress" />
 describe("Editor", () => {
-    before(() => {
-        cy.request("DELETE", "http://localhost:3000/api/editor/reset");
-    });
+    //   before(() => {
+    //       cy.request("DELETE", "http://localhost:3000/api/editor/reset");
+    //   });
 
     beforeEach(() => {
         cy.visit("http://localhost:5173");
