@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white dark:bg-gray-900">
+    <div class="bg-gray-50 dark:bg-gray-900">
         <div
             class="
                 flex flex-col
