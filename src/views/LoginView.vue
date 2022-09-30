@@ -239,7 +239,6 @@ const login = async () => {
         };
 
         const status = await userStore.login(data);
-        let user = userStore.getUser;
 
         router.push({ path: "/" });
         localStorage.removeItem("email");
