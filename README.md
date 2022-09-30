@@ -1,4 +1,5 @@
 # Editor 
+![example workflow](https://github.com/sumca252/editor/actions/workflows/cypress.js.yml/badge.svg?branch=main)
 
 A rich text editor made in the course [DV1612 JavaScript-based web frameworks](https://jsramverk.se/) at [BTH University](https://bth.se/).
 
