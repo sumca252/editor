@@ -203,7 +203,6 @@ import { useUserStore } from "@/store/user";
 
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
-import { register } from "quill";
 
 /**
  * refs
@@ -211,9 +210,9 @@ import { register } from "quill";
 const email = ref("");
 const password = ref("");
 
-const showError = ref(false);
-const error = ref("");
-
+/**
+ * router
+ */
 const router = useRouter();
 
 /**
@@ -241,11 +240,6 @@ const login = async () => {
 
         const status = await userStore.login(data);
         let user = userStore.getUser;
-
-        if (status === 400) {
-            showError.value = true;
-            error.value = status.message;
-        }
 
         router.push({ path: "/" });
         localStorage.removeItem("email");
