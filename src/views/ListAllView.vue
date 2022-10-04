@@ -124,12 +124,16 @@ const userStore = useUserStore();
 const getDocuments = async () => {
     try {
         const email = userStore.getUserEmail;
-        const response = await EditorService.getAllData();
+        const response = await EditorService.queryAllDocuments();
         let temp = [];
+
         if (response.status === 200) {
-            temp = response.data.data.filter((doc) => {
-                if (doc.author === email || doc.allowed_users.includes(email)) {
-                    return doc;
+            temp = response.data.data.documents.filter((document) => {
+                if (
+                    document.author === email ||
+                    document.allowed_users.includes(email)
+                ) {
+                    return document;
                 }
             });
             documents.value = temp;
