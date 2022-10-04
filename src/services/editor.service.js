@@ -1,6 +1,26 @@
 import axios from "axios";
 
 class EditorService {
+    queryAllDocuments() {
+        return axios({
+            method: "post",
+            url: "https://jsramverk-editor-isal-20.azurewebsites.net/graphql",
+            data: {
+                query: `
+                    query {
+                        documents {
+                          _id
+                          title
+                          content
+                          author
+                          allowed_users
+                        }
+                    }
+                `,
+            },
+        });
+    }
+
     getAllData() {
         return axios.get("/editor");
     }

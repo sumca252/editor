@@ -100,7 +100,7 @@ import { useUserStore } from "../store/user";
 /**
  * socket
  */
-const socket = io("http://localhost:3000");
+const socket = io("https://jsramverk-editor-isal-20.azurewebsites.net");
 
 /**
  * refs
