@@ -117,6 +117,7 @@ import { useRoute, useRouter } from "vue-router";
 import { io } from "socket.io-client";
 import EditorService from "../services/editor.service";
 import { useUserStore } from "../store/user";
+import html2pdf from "html2pdf.js";
 
 /**
  * socket
@@ -189,7 +190,18 @@ const onTextChange = (delta) => {
 };
 
 const exportAsPDF = () => {
+    const quill = editorRef.value.getQuill();
+    const content = quill.root.innerHTML;
+
+    const options = {
+        margin: 1,
+        filename: `${title.value}.pdf`,
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
+
     console.log("exporting editor content as pdf");
+    html2pdf().from(content).set(options).save();
 };
 
 /**
