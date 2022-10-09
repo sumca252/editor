@@ -13,6 +13,7 @@
             <h1 class="text-2xl font-bold">Update Text</h1>
             <div class="flex justify-between items-center">
                 <button
+                    @click="exportAsPDF"
                     class="
                         bg-transparent
                         hover:bg-blue-500
@@ -111,7 +112,7 @@
 /**
  * imports
  */
-import { ref, onMounted, watch, watchEffect, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { io } from "socket.io-client";
 import EditorService from "../services/editor.service";
@@ -185,6 +186,10 @@ const getDataById = async () => {
 
 const onTextChange = (delta) => {
     socket.emit("send-changes", delta, route.params.id);
+};
+
+const exportAsPDF = () => {
+    console.log("exporting editor content as pdf");
 };
 
 /**
