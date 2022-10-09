@@ -50,8 +50,9 @@
                             leading-tight
                             focus:outline-none
                         "
-                        type="email"
+                        type="text"
                         name="email"
+                        placeholder="Seperate emails with commas"
                         v-model="email"
                         :disabled="!docRef"
                     />
@@ -112,12 +113,77 @@
                         <button class="ql-italic"></button>
                         <button class="ql-underline"></button>
                         <button class="ql-strike"></button>
-                        <button id="custom-button" @click="addComment">
-                            Comment
+                        <button
+                            id="custom-button"
+                            @click="addComment"
+                            class="
+                                flex
+                                items-center
+                                justify-center
+                                bg-gray-500
+                                hover:bg-gray-700
+                                border-gray-500
+                                hover:border-gray-700
+                                text-md
+                                border-4
+                            "
+                        >
+                            comment
                         </button>
                     </div>
                 </template>
             </QuillEditor>
+            <div id="comments" class="mt-5" v-if="comments.length > 0">
+                <h1
+                    class="text-2xl font-bold mb-2 dark:text-gray-50 text-black"
+                >
+                    Comments
+                </h1>
+                <div
+                    id="comments-bubble"
+                    class="
+                        flex flex-col
+                        justify-start
+                        items-start
+                        w-full
+                        h-full
+                        p-1
+                        py-2
+                        rounded
+                    "
+                >
+                    <span
+                        class="
+                            darK:border-gray-700
+                            dark:bg-gray-800 dark:text-blue-300
+                            bg-white
+                            text-blue-600
+                            border border-gray-300
+                            text-xs
+                            rounded
+                            px-3
+                            py-3
+                            mb-2
+                            cursor-pointer
+                            w-full
+                        "
+                        v-for="comment in comments"
+                        :key="comment._id"
+                    >
+                        <span class="no-underline text-gray-700">
+                            <span class="no-underline"
+                                >{{ comment.author }}
+                                <span
+                                    class="text-black comment underline"
+                                    @click="markComment(comment)"
+                                >
+                                    {{ comment.comment }}
+                                </span>
+                            </span>
+                        </span>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -131,7 +197,7 @@ import { io } from "socket.io-client";
 import EditorService from "../services/editor.service";
 import { useUserStore } from "../store/user";
 import html2pdf from "html2pdf.js";
-
+import Swal from "sweetalert2";
 /**
  * socket
  */
@@ -150,6 +216,7 @@ const title = ref("");
 const content = ref("");
 const docRef = ref(false);
 
+const comments = ref([]);
 /**
  * store
  */
@@ -177,10 +244,6 @@ const updateText = async () => {
             route.params.id,
             updatedData
         );
-
-        if (response.status === 200) {
-            router.push({ name: "Home" });
-        }
     } catch (error) {
         throw new Error(error);
     }
@@ -222,7 +285,98 @@ const exportAsPDF = () => {
 };
 
 const addComment = () => {
-    console.log("add comment");
+    const quill = editorRef.value.getQuill();
+    const selection = quill.getSelection();
+
+    if (selection) {
+        console.log("selection", selection);
+        Swal.fire({
+            title: "Add comment",
+            input: "text",
+            inputAttributes: {
+                autocapitalize: "off",
+            },
+            showCancelButton: true,
+            confirmButtonText: "Add",
+            showLoaderOnConfirm: true,
+            preConfirm: async (comment) => {
+                if (comment) {
+                    comments.value.push({
+                        documentId: route.params.id,
+                        author: userStore.user.email,
+                        range: JSON.stringify(selection),
+                        comment: comment,
+                    });
+
+                    let reponse = await EditorService.insertComment({
+                        documentId: route.params.id,
+                        author: userStore.user.email,
+                        range: JSON.stringify(selection),
+                        comment: comment,
+                    });
+
+                    if (reponse.status === 200) {
+                        await updateText();
+                        quill.formatText(
+                            selection.index,
+                            selection.length,
+                            "background",
+                            "yellow"
+                        );
+
+                        Swal.fire({
+                            title: "Comment added",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    }
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        });
+    }
+};
+
+const getCommentsByDocumentId = async () => {
+    try {
+        let response = await EditorService.getCommentsByDocumentId(
+            route.params.id
+        );
+
+        if (response.status === 200) {
+            comments.value = response.data.data.filter((comment) => {
+                if (comment.documentId === route.params.id) {
+                    return comment;
+                }
+            });
+
+            comments.value.forEach((comment) => {
+                const quill = editorRef.value.getQuill();
+                const range = JSON.parse(comment.range);
+
+                quill.formatText(
+                    range.index,
+                    range.length,
+                    "background",
+                    "yellow"
+                );
+
+                console.log("comment: ", comment.comment);
+            });
+        } else {
+            comments.value = [];
+        }
+    } catch (error) {
+        console.log("error", error);
+    }
+};
+
+const markComment = (comment) => {
+    const quill = editorRef.value.getQuill();
+    const range = JSON.parse(comment.range);
+
+    quill.setSelection(range.index, range.length);
 };
 
 /**
@@ -231,6 +385,8 @@ const addComment = () => {
 
 onMounted(() => {
     getDataById();
+    getCommentsByDocumentId();
+    editorRef.value.getQuill().focus();
     socket.emit("update-document", route.params.id);
 
     socket.on("receive-changes", (document) => {
@@ -251,6 +407,7 @@ onUnmounted(() => {
 #custom-button {
     display: flex;
     justify-content: center;
+    align-items: center;
     align-items: center;
     width: inherit;
 }
