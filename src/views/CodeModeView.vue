@@ -75,6 +75,7 @@ import { dracula } from "@uiw/codemirror-theme-dracula";
 import { useUserStore } from "@/store/user";
 import CodeService from "@/services/code.service.js";
 import Swal from "sweetalert2";
+import { saveAs } from "file-saver";
 
 /**
  * config for codemirror
@@ -135,10 +136,12 @@ const executeCode = async () => {
 const saveFile = async () => {
     // save file to database as blob
     try {
-        const code = btoa(view.value.state.doc.toString());
+        const code = view.value.state.doc.toString();
+        const data = btoa(code);
+
         const response = await CodeService.saveCode({
             author: userStore.user.email,
-            code: code,
+            code: data,
         });
 
         if (response.status != 201) {
@@ -150,14 +153,22 @@ const saveFile = async () => {
             });
         }
 
-        Swal.fire({
+        await Swal.fire({
             title: "Success!",
             text: "File saved successfully!",
             icon: "success",
             confirmButtonText: "Ok",
         });
+
+        saveCodeAsFile(code);
     } catch (error) {
         throw new Error(error);
     }
+};
+
+const saveCodeAsFile = (code) => {
+    const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
+
+    saveAs(blob, "code.js");
 };
 </script>
