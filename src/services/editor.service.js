@@ -1,10 +1,14 @@
 import axios from "axios";
 
+const url = window.location.origin.includes("localhost")
+    ? "http://localhost:3000"
+    : "https://jsramverk-editor-isal-20.azurewebsites.net";
+
 class EditorService {
     queryAllDocuments() {
         return axios({
             method: "post",
-            url: "https://jsramverk-editor-isal-20.azurewebsites.net/graphql",
+            url: `${url}/graphql`,
             data: {
                 query: `
                     query {

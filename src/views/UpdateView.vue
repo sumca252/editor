@@ -122,7 +122,10 @@ import html2pdf from "html2pdf.js";
 /**
  * socket
  */
-const socket = io("https://jsramverk-editor-isal-20.azurewebsites.net");
+const url = window.location.origin.includes("localhost")
+    ? "http://localhost:3000"
+    : "https://jsramverk-editor-isal-20.azurewebsites.net";
+const socket = io(url);
 
 /**
  * refs
