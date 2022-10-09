@@ -11,6 +11,26 @@
             "
         >
             <h1 class="text-2xl font-bold">Update Text</h1>
+            <div class="flex justify-between items-center">
+                <button
+                    class="
+                        bg-transparent
+                        hover:bg-blue-500
+                        text-blue-700
+                        font-semibold
+                        hover:text-white
+                        py-2
+                        px-4
+                        border border-blue-500
+                        hover:border-transparent
+                        rounded
+                        mr-2
+                    "
+                >
+                    <i class="fas fa-download"></i>
+                    Export as PDF
+                </button>
+            </div>
         </div>
         <div class="mx-auto max-w-screen-xl p-4">
             <form class="w-full pb-10" @submit.prevent="updateText">
