@@ -104,7 +104,20 @@
                 v-model:content="content"
                 contentType="delta"
                 @textChange="onTextChange"
-            />
+                toolbar="#toolbar"
+            >
+                <template #toolbar>
+                    <div id="toolbar">
+                        <button class="ql-bold"></button>
+                        <button class="ql-italic"></button>
+                        <button class="ql-underline"></button>
+                        <button class="ql-strike"></button>
+                        <button id="custom-button" @click="addComment">
+                            Comment
+                        </button>
+                    </div>
+                </template>
+            </QuillEditor>
         </div>
     </div>
 </template>
@@ -125,6 +138,7 @@ import html2pdf from "html2pdf.js";
 const url = window.location.origin.includes("localhost")
     ? "http://localhost:3000"
     : "https://jsramverk-editor-isal-20.azurewebsites.net";
+
 const socket = io(url);
 
 /**
@@ -207,6 +221,10 @@ const exportAsPDF = () => {
     html2pdf().from(content).set(options).save();
 };
 
+const addComment = () => {
+    console.log("add comment");
+};
+
 /**
  * lifecycle Hooks
  */
@@ -228,5 +246,12 @@ onUnmounted(() => {
 <style>
 .ql-editor {
     min-height: 500px;
+}
+
+#custom-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: inherit;
 }
 </style>
