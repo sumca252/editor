@@ -40,6 +40,18 @@ class EditorService {
     updateData(id, data) {
         return axios.put(`/editor/${id}`, data);
     }
+
+    getAllComments() {
+        return axios.get("/comments");
+    }
+
+    getCommentsByDocumentId(id) {
+        return axios.get(`/comments/${id}`);
+    }
+
+    insertComment(data) {
+        return axios.post("/comments", data);
+    }
 }
 
 export default new EditorService();
