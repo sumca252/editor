@@ -15,15 +15,21 @@
         "deploy": "npm run build && rsync -av --delete dist/ isal20@ssh.student.bth.se:www/editor"
     },
     "dependencies": {
+        "@codemirror/lang-javascript": "^6.1.0",
+        "@codemirror/theme-one-dark": "^6.1.0",
+        "@uiw/codemirror-theme-dracula": "^4.12.4",
         "@vueup/vue-quill": "^1.0.0-beta.9",
         "axios": "^0.27.2",
+        "codemirror": "^6.0.1",
         "file-saver": "^2.0.5",
         "flowbite": "^1.5.3",
         "html2pdf.js": "^0.10.1",
         "pinia": "^2.0.22",
         "socket.io-client": "^4.5.2",
+        "sweetalert2": "^11.4.38",
         "vee-validate": "^4.6.9",
         "vue": "^3.2.37",
+        "vue-codemirror": "^6.1.1",
         "vue-router": "^4.1.5",
         "yup": "^0.32.11"
     },
