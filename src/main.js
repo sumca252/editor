@@ -5,9 +5,11 @@ import "@/assets/style.css";
 import App from "@/App.vue";
 import router from "@/router";
 import axios from "axios";
+const url = window.location.origin.includes("localhost")
+    ? "http://localhost:3000/api"
+    : "https://jsramverk-editor-isal-20.azurewebsites.net/api";
 
-axios.defaults.baseURL =
-    "https://jsramverk-editor-isal-20.azurewebsites.net/api";
+axios.defaults.baseURL = url;
 
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";

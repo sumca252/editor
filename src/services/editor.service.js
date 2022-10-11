@@ -1,10 +1,14 @@
 import axios from "axios";
 
+const url = window.location.origin.includes("localhost")
+    ? "http://localhost:3000"
+    : "https://jsramverk-editor-isal-20.azurewebsites.net";
+
 class EditorService {
     queryAllDocuments() {
         return axios({
             method: "post",
-            url: "https://jsramverk-editor-isal-20.azurewebsites.net/graphql",
+            url: `${url}/graphql`,
             data: {
                 query: `
                     query {
@@ -35,6 +39,18 @@ class EditorService {
 
     updateData(id, data) {
         return axios.put(`/editor/${id}`, data);
+    }
+
+    getAllComments() {
+        return axios.get("/comments");
+    }
+
+    getCommentsByDocumentId(id) {
+        return axios.get(`/comments/${id}`);
+    }
+
+    insertComment(data) {
+        return axios.post("/comments", data);
     }
 }
 
