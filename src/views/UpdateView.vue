@@ -31,6 +31,25 @@
                     <i class="fas fa-download"></i>
                     Export as PDF
                 </button>
+                <button
+                    @click="sendInviteToEditDocument"
+                    class="
+                        bg-transparent
+                        hover:bg-blue-500
+                        text-blue-700
+                        font-semibold
+                        hover:text-white
+                        py-2
+                        px-4
+                        border border-blue-500
+                        hover:border-transparent
+                        rounded
+                        mr-2
+                    "
+                >
+                    <i class="fa-solid fa-envelope"></i>
+                    Send invite
+                </button>
             </div>
         </div>
         <div class="mx-auto max-w-screen-xl p-4">
@@ -193,11 +212,15 @@
  */
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
 import { io } from "socket.io-client";
-import EditorService from "../services/editor.service";
-import { useUserStore } from "../store/user";
-import html2pdf from "html2pdf.js";
 import Swal from "sweetalert2";
+import html2pdf from "html2pdf.js";
+
+import EditorService from "@/services/editor.service";
+import EmailService from "@/services/email.service";
+import { useUserStore } from "@/store/user";
+
 /**
  * socket
  */
@@ -280,7 +303,7 @@ const exportAsPDF = () => {
         jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
 
-    console.log("exporting editor content as pdf");
+    // console.log("exporting editor content as pdf");
     html2pdf().from(content).set(options).save();
 };
 
@@ -289,7 +312,7 @@ const addComment = () => {
     const selection = quill.getSelection();
 
     if (selection) {
-        console.log("selection", selection);
+        // console.log("selection", selection);
         Swal.fire({
             title: "Add comment",
             input: "text",
@@ -362,7 +385,7 @@ const getCommentsByDocumentId = async () => {
                     "yellow"
                 );
 
-                console.log("comment: ", comment.comment);
+                // console.log("comment: ", comment.comment);
             });
         } else {
             comments.value = [];
@@ -377,6 +400,148 @@ const markComment = (comment) => {
     const range = JSON.parse(comment.range);
 
     quill.setSelection(range.index, range.length);
+};
+
+const sendInviteToEditDocument = async () => {
+    const from = import.meta.env.MAILGUN_FROM_EMAIL;
+
+    const html = `
+            <div class="mb-6">
+                <label
+                    for="email"
+                    class="
+                        float-left
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                        text-gray-900
+                        dark:text-gray-300
+                    "
+                    >From</label
+                >
+                <select
+                    id="emailFrom"
+                    class="
+                        bg-gray-50
+                        border border-gray-300
+                        text-gray-900 text-sm
+                        rounded-lg
+                        focus:ring-blue-500 focus:border-blue-500
+                        block
+                        w-full
+                        p-2.5
+                        dark:bg-gray-700
+                        dark:border-gray-600
+                        dark:placeholder-gray-400
+                        dark:text-white
+                        dark:focus:ring-blue-500
+                        dark:focus:border-blue-500
+                    "
+                >
+                    <option>${import.meta.env.VITE_MAILGUN_FROM_EMAIL}</option>
+                    <option>${
+                        import.meta.env.VITE_MAILGUN_FROM_EMAIL_ONE
+                    }</option>
+                    <option>${
+                        import.meta.env.VITE_MAILGUN_FROM_EMAIL_TWO
+                    }</option>
+                </select>
+            </div>
+            <div class="mb-6">
+                <label
+                    for="email"
+                    class="
+                        float-left
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                        text-gray-900
+                        dark:text-gray-300
+                    "
+                    >To</label
+                >
+                <select
+                    id="emailTo"
+                    class="
+                        bg-gray-50
+                        border border-gray-300
+                        text-gray-900 text-sm
+                        rounded-lg
+                        focus:ring-blue-500 focus:border-blue-500
+                        block
+                        w-full
+                        p-2.5
+                        dark:bg-gray-700
+                        dark:border-gray-600
+                        dark:placeholder-gray-400
+                        dark:text-white
+                        dark:focus:ring-blue-500
+                        dark:focus:border-blue-500
+                    "
+                >
+                    <option>${import.meta.env.VITE_MAILGUN_FROM_EMAIL}</option>
+                    <option>${
+                        import.meta.env.VITE_MAILGUN_FROM_EMAIL_ONE
+                    }</option>
+                    <option>${
+                        import.meta.env.VITE_MAILGUN_FROM_EMAIL_TWO
+                    }</option>
+                </select>
+            </div>
+           
+            `;
+    try {
+        // swall alert input email
+
+        Swal.fire({
+            title: "Invite a user to edit document",
+            html: html,
+            inputAttributes: {
+                autocapitalize: "off",
+            },
+            showCancelButton: true,
+            confirmButtonText: "Send invite",
+            showLoaderOnConfirm: true,
+            preConfirm: async (status) => {
+                if (status) {
+                    const emailTo = document.getElementById("emailTo").value;
+                    const emailFrom =
+                        document.getElementById("emailFrom").value;
+
+                    try {
+                        const response =
+                            await EmailService.sendInviteToEditDocument({
+                                from: emailFrom,
+                                to: emailTo,
+                                documentId: route.params.id,
+                            });
+
+                        if (response.status === 200) {
+                            Swal.fire({
+                                title: "Invite sent successfully",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            title: "Error sending invite",
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    }
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+            backdrop: true,
+        });
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 /**
