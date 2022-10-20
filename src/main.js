@@ -4,6 +4,7 @@ import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import App from "@/App.vue";
 import { QuillEditor } from "@vueup/vue-quill";
 import axios from "axios";
+
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import router from "@/router";
