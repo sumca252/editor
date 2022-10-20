@@ -8,6 +8,7 @@ import ListAllView from "@/views/ListAllView.vue";
 import UpdateView from "@/views/UpdateView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import LoginView from "@/views/LoginView.vue";
+import CodeModeView from "@/views/CodeModeView.vue";
 
 const routes = [
     {
@@ -39,6 +40,15 @@ const routes = [
                 component: UpdateView,
                 meta: {
                     title: "Update Text",
+                    requiresAuth: true,
+                },
+            },
+            {
+                path: "/editor/codemode",
+                name: "CodeMode",
+                component: CodeModeView,
+                meta: {
+                    title: "Code Mode",
                     requiresAuth: true,
                 },
             },
