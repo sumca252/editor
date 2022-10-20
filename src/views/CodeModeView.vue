@@ -62,6 +62,14 @@
             @ready="handleReady"
             border
         />
+        <div class="terminal mt-5" v-if="outputRef">
+            <div class="terminal-tab">
+                <h1 class="terminal-title">Editor</h1>
+            </div>
+            <div class="output">
+                {{ outputRef }}
+            </div>
+        </div>
     </div>
 </template>
 <script setup>
@@ -86,12 +94,8 @@ const extensions = [javascript(), dracula];
  * refs
  */
 const view = shallowRef();
-const code = ref(`const add = (num1, num2) => {
-    return num1 + num2;
-}
-
-console.log(add(1, 2)); // output: 3
-`);
+const outputRef = ref("");
+const code = ref(`console.log("Hello World!")`);
 
 /**
  * store
@@ -112,22 +116,10 @@ const executeCode = async () => {
         const response = await CodeService.executeCode(code);
         const output = atob(response.data.data);
         if (response.status != 201) {
-            view.value.dispatch({
-                changes: {
-                    from: 0,
-                    to: view.value.state.doc.length,
-                    insert: `Error: ${response.data.message}`,
-                },
-            });
+            outputRef.value = response.data.message;
         }
 
-        view.value.dispatch({
-            changes: {
-                from: 0,
-                to: view.value.state.doc.length,
-                insert: `Output: ${output}`,
-            },
-        });
+        outputRef.value = output;
     } catch (error) {
         throw new Error(error);
     }
@@ -153,13 +145,6 @@ const saveFile = async () => {
             });
         }
 
-        await Swal.fire({
-            title: "Success!",
-            text: "File saved successfully!",
-            icon: "success",
-            confirmButtonText: "Ok",
-        });
-
         saveCodeAsFile(code);
     } catch (error) {
         throw new Error(error);
@@ -172,3 +157,50 @@ const saveCodeAsFile = (code) => {
     saveAs(blob, "code.js");
 };
 </script>
+
+<style scoped>
+.terminal {
+    background-color: #282a36;
+    height: 200px;
+    width: 100%;
+    color: #fff;
+    font-family: "Fira Code", monospace;
+    font-size: 1.1rem;
+    border-radius: 10px;
+}
+
+.terminal-title {
+    font-size: 1.3rem;
+    color: #ff76ae;
+    background: #282a36;
+    width: 200px;
+    padding: 5px 10px 0 10px;
+    border-radius: 10px 10px 0 0;
+    margin: 0 0 0 20px;
+    height: 100%;
+}
+
+.terminal-tab {
+    background: #0a0a0a;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.output {
+    margin: 0;
+    padding: 10px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #fff;
+    font-family: "Fira Code", monospace;
+    border-radius: 10px;
+    background-color: #282a36;
+}
+
+.output::before {
+    content: "➜  ~ ";
+    color: #8be9fd;
+}
+</style>
