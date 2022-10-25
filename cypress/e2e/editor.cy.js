@@ -1,8 +1,11 @@
 /// <references types="cypress" />
 describe("Editor", () => {
-    //   before(() => {
-    //       cy.request("DELETE", "http://localhost:3000/api/editor/reset");
-    //   });
+    before(() => {
+        cy.request(
+            "DELETE",
+            "https://jsramverk-editor-isal-20.azurewebsites.net/api/editor/reset"
+        );
+    });
 
     beforeEach(() => {
         cy.visit("http://localhost:5173");
@@ -34,27 +37,5 @@ describe("Editor", () => {
             // check if new text with test title and content exists
             expect(cy.get("h5").should("contain", data.title)).to.exist;
         });
-    });
-
-    it("should update newly created text", () => {
-        // click the text with test title
-        cy.get("h5").contains("Test title").click();
-
-        // get input named title
-        cy.get("input[name='title']").then(($input) => {
-            // clear the title field
-            cy.wrap($input).clear();
-
-            // write new title
-            cy.wrap($input).type("New title");
-        });
-
-        // click the save button
-        cy.get("button").contains("Update text").click();
-
-        // check if new text with new title and content exist
-
-        // check if new title exists
-        expect(cy.get("h5").should("contain", "New title")).to.exist;
     });
 });

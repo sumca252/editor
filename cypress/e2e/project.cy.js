@@ -2,11 +2,20 @@
 const path = require("path");
 
 describe("Project", () => {
-    // before(() => {
-    //     cy.request("DELETE", "http://localhost:3000/api/editor/reset");
-    //     cy.request("DELETE", "http://localhost:3000/api/users/reset");
-    //     cy.request("DELETE", "http://localhost:3000/api/comments");
-    // });
+    before(() => {
+        cy.request(
+            "DELETE",
+            "https://jsramverk-editor-isal-20.azurewebsites.net/api/editor/reset"
+        );
+        cy.request(
+            "DELETE",
+            "https://jsramverk-editor-isal-20.azurewebsites.net/api/users/reset"
+        );
+        cy.request(
+            "DELETE",
+            "https://jsramverk-editor-isal-20.azurewebsites.net/api/comments"
+        );
+    });
 
     beforeEach(() => {
         cy.visit("http://localhost:5173");

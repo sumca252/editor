@@ -1,8 +1,11 @@
 /// <references types="cypress" />
 describe("Editor", () => {
-    //    before(() => {
-    //        cy.request("DELETE", "http://localhost:3000/api/users/reset");
-    //    });
+    before(() => {
+        cy.request(
+            "DELETE",
+            "https://jsramverk-editor-isal-20.azurewebsites.net/api/users/reset"
+        );
+    });
 
     beforeEach(() => {
         cy.visit("http://localhost:5173");
